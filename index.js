@@ -1,7 +1,11 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable indent */
 const fs = require('node:fs');
 const path = require('node:path');
 const {
-  Client, Collection, Events, GatewayIntentBits,
+  Client, Collection, Events, GatewayIntentBits, EmbedBuilder,
 } = require('discord.js');
 const { token } = require('./config.json');
 
@@ -31,6 +35,20 @@ client.once(Events.ClientReady, (readyClient) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
+  if (interaction.isButton()) {
+    const { customId } = interaction;
+    if (customId === 'view more') {
+      const viewmoreEmbed = new EmbedBuilder()
+        .setColor(0x7289da)
+        .setTitle('Discord Bot for Final')
+        .setURL('https://github.com/RVCC-IDMX/my-bot-ChristNunez')
+        .setAuthor({ name: 'Christ Nunez' })
+        .setTimestamp();
+      await interaction.deferUpdate();
+      await interaction.channel.send({ embeds: [viewmoreEmbed] });
+      return;
+    }
+  }
   if (!interaction.isChatInputCommand()) return;
   const command = interaction.client.commands.get(interaction.commandName);
 
